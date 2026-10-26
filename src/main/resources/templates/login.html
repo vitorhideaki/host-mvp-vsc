@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Autenticação de Usuário')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div class="form-card">
+        <h1 style="font-size: 1.5rem; margin-bottom: 0.4rem;">Entrar na Plataforma</h1>
+        <p class="subtitulo" style="margin-bottom: 1.5rem;">
+            Autentique-se para gerenciar seu perfil ou anunciar imóveis e quartos.
+        </p>
+
+        <div th:if="${param.erro}" class="alerta alerta-erro">
+            E-mail ou senha inválidos. Verifique suas credenciais e tente novamente.
+        </div>
+        <div th:if="${mensagemSucesso}" class="alerta alerta-sucesso" th:text="${mensagemSucesso}"></div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-grupo">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" class="form-controle"
+                       placeholder="seuemail@exemplo.com" required autofocus>
+            </div>
+
+            <div class="form-grupo">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" class="form-controle"
+                       placeholder="Digite sua senha" required>
+            </div>
+
+            <button type="submit" class="btn btn-primario" style="width: 100%; margin-top: 0.5rem;">
+                Entrar
+            </button>
+        </form>
+
+        <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+        <p style="text-align: center; font-size: 0.92rem;">
+            Ainda não possui uma conta?
+            <a th:href="@{/cadastro}" style="color: #1e40af; font-weight: 600;">Cadastre-se gratuitamente</a>
+        </p>
+
+        <div class="alerta alerta-info" style="margin-top: 1.25rem; margin-bottom: 0; font-size: 0.85rem;">
+            <strong>Contas de demonstração pré-cadastradas:</strong><br>
+            • <strong>Anunciante:</strong> <code>anunciante@host.com</code> / Senha: <code>Senha@123456</code><br>
+            • <strong>Usuário Comum:</strong> <code>estudante@host.com</code> / Senha: <code>Senha@123456</code>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+</body>
+</html>

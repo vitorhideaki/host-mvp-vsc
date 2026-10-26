@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastrar Novo Quarto')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div class="form-card">
+        <h1 style="font-size: 1.5rem; margin-bottom: 0.4rem;">Cadastrar Novo Quarto</h1>
+        <p class="subtitulo" style="margin-bottom: 1.5rem;">
+            Adicione um quarto a um dos seus imóveis cadastrados.
+            Ele ficará imediatamente disponível no Catálogo Público.
+        </p>
+
+        <div th:if="${mensagemErro}" class="alerta alerta-erro" th:text="${mensagemErro}"></div>
+
+        <form th:action="@{/anunciante/quartos/novo}" th:object="${quartoDTO}" method="post" novalidate>
+            <div class="form-grupo">
+                <label for="imovelId">Imóvel *</label>
+                <select id="imovelId" th:field="*{imovelId}" class="form-controle" required>
+                    <option th:each="imovel : ${imoveis}"
+                            th:value="${imovel.id}"
+                            th:text="${imovel.titulo + ' (' + imovel.localizacaoPublica + ')'}">
+                    </option>
+                </select>
+                <span class="erro-campo" th:if="${#fields.hasErrors('imovelId')}" th:errors="*{imovelId}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="identificacao">Identificação / Título do Quarto *</label>
+                <input type="text" id="identificacao" th:field="*{identificacao}" class="form-controle"
+                       placeholder="Ex.: Quarto Individual 01 - Mobiliado" required autofocus>
+                <span class="erro-campo" th:if="${#fields.hasErrors('identificacao')}" th:errors="*{identificacao}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="tipo">Tipo do Quarto *</label>
+                <select id="tipo" th:field="*{tipo}" class="form-controle" required>
+                    <option th:each="t : ${tiposQuarto}"
+                            th:value="${t}"
+                            th:text="${t.descricao}">
+                    </option>
+                </select>
+                <span class="erro-campo" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="capacidade">Capacidade (Número de Pessoas / Vagas) *</label>
+                <input type="number" id="capacidade" th:field="*{capacidade}" min="1" max="20" class="form-controle" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('capacidade')}" th:errors="*{capacidade}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="valorMensal">Valor Mensal do Aluguel (R$) *</label>
+                <input type="number" id="valorMensal" th:field="*{valorMensal}" step="0.01" min="0.01"
+                       class="form-controle" placeholder="Ex.: 650.00" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('valorMensal')}" th:errors="*{valorMensal}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="comodidades">Comodidades do Quarto *</label>
+                <input type="text" id="comodidades" th:field="*{comodidades}" class="form-controle"
+                       placeholder="Ex.: Cama box, escrivaninha, guarda-roupa, Wi-Fi 500Mb, ar-condicionado" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('comodidades')}" th:errors="*{comodidades}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="regras">Regras de Convivência</label>
+                <textarea id="regras" th:field="*{regras}" class="form-controle" rows="3"
+                          placeholder="Ex.: Proibido fumar no interior. Silêncio após as 22h."></textarea>
+                <span class="erro-campo" th:if="${#fields.hasErrors('regras')}" th:errors="*{regras}"></span>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+                <button type="submit" class="btn btn-primario" style="flex: 1;">Publicar Quarto</button>
+                <a th:href="@{/anunciante/painel}" class="btn btn-contorno">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+</body>
+</html>

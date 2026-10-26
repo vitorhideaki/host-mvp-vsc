@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(tituloPagina)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${tituloPagina} + ' | Host - Quartos Compartilhados'">Host</title>
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+
+<nav th:fragment="navbar" class="navbar" aria-label="Navegação Principal">
+    <div class="navbar-container">
+        <a th:href="@{/catalogo}" class="navbar-brand">Host • Quartos Compartilhados</a>
+
+        <div class="navbar-links">
+            <a th:href="@{/catalogo}">Catálogo Público</a>
+
+            <!-- Links para usuário autenticado com perfil de Anunciante -->
+            <a sec:authorize="hasAnyRole('ANUNCIANTE', 'ADMINISTRADOR')"
+               th:href="@{/anunciante/painel}">Painel do Anunciante</a>
+
+            <!-- Link para usuário autenticado que ainda não é Anunciante -->
+            <a sec:authorize="hasRole('USUARIO_CADASTRADO')"
+               th:href="@{/perfil}">Quero Anunciar</a>
+
+            <a sec:authorize="isAuthenticated()"
+               th:href="@{/perfil}">Minha Conta</a>
+
+            <!-- Visitante não autenticado -->
+            <a sec:authorize="isAnonymous()" th:href="@{/login}">Entrar</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/cadastro}" class="btn-nav-destaque">Criar Conta</a>
+
+            <!-- Botão de Sair para autenticado -->
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn-logout">Sair</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<footer th:fragment="rodape"></footer>
+
+</body>
+</html>

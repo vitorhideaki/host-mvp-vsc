@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Painel do Anunciante')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div th:if="${mensagemSucesso}" class="alerta alerta-sucesso" th:text="${mensagemSucesso}"></div>
+    <div th:if="${mensagemErro}" class="alerta alerta-erro" th:text="${mensagemErro}"></div>
+
+    <div class="cabecalho-pagina">
+        <div>
+            <h1>Painel do Anunciante</h1>
+            <p class="subtitulo">Gerencie seus imóveis e quartos cadastrados para locação compartilhada.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <a th:href="@{/anunciante/imoveis/novo}" class="btn btn-primario">+ Cadastrar Imóvel</a>
+            <a th:href="@{/anunciante/quartos/novo}" class="btn btn-secundario">+ Cadastrar Quarto</a>
+        </div>
+    </div>
+
+    <h2 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Meus Imóveis (<span th:text="${#lists.size(imoveis)}">0</span>)</h2>
+
+    <div th:if="${#lists.isEmpty(imoveis)}" class="card" style="margin-bottom: 2rem; text-align: center;">
+        <p>Você ainda não cadastrou nenhum imóvel.</p>
+        <div style="margin-top: 0.75rem;">
+            <a th:href="@{/anunciante/imoveis/novo}" class="btn btn-primario">Cadastrar Primeiro Imóvel</a>
+        </div>
+    </div>
+
+    <div class="tabela-container" th:if="${!#lists.isEmpty(imoveis)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Título do Imóvel</th>
+                <th>Endereço Completo (Privado)</th>
+                <th>Bairro / Cidade (Público)</th>
+                <th>Ação Rápida</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="imovel : ${imoveis}">
+                <td><strong th:text="${imovel.titulo}"></strong></td>
+                <td th:text="${imovel.endereco} + (${imovel.cep != null and !#strings.isEmpty(imovel.cep)} ? ' - CEP ' + ${imovel.cep} : '')"></td>
+                <td th:text="${imovel.localizacaoPublica}"></td>
+                <td>
+                    <a th:href="@{/anunciante/quartos/novo(imovelId=${imovel.id})}" class="btn btn-contorno"
+                       style="padding: 0.35rem 0.75rem; font-size: 0.85rem;">+ Adicionar Quarto</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Meus Quartos Cadastrados (<span th:text="${#lists.size(quartos)}">0</span>)</h2>
+
+    <div th:if="${#lists.isEmpty(quartos)}" class="card" style="text-align: center;">
+        <p>Nenhum quarto cadastrado nos seus imóveis ainda.</p>
+    </div>
+
+    <div class="tabela-container" th:if="${!#lists.isEmpty(quartos)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Identificação do Quarto</th>
+                <th>Imóvel</th>
+                <th>Tipo</th>
+                <th>Capacidade</th>
+                <th>Valor Mensal</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="quarto : ${quartos}">
+                <td>
+                    <strong th:text="${quarto.identificacao}"></strong>
+                    <div style="font-size: 0.82rem; color: #64748b;" th:text="${quarto.comodidades}"></div>
+                </td>
+                <td th:text="${quarto.imovel.titulo}"></td>
+                <td th:text="${quarto.tipo.descricao}"></td>
+                <td th:text="${quarto.capacidade} + ' pessoa(s)'"></td>
+                <td>R$ <span th:text="${#numbers.formatDecimal(quarto.valorMensal, 1, 'POINT', 2, 'COMMA')}"></span></td>
+                <td><span class="badge badge-disponivel" th:text="${quarto.status.descricao}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Acesso Restrito')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div class="form-card" style="text-align: center;">
+        <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Acesso Restrito a Anunciantes</h1>
+        <p class="subtitulo" style="margin-bottom: 1.5rem;">
+            Para acessar a área de cadastro de imóveis e quartos, é necessário habilitar o perfil de
+            <strong>Anunciante</strong> preenchendo seus dados adicionais (CPF/CNPJ, telefone, comprovante e chave PIX).
+        </p>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: center;">
+            <a th:href="@{/perfil}" class="btn btn-secundario">Habilitar Perfil de Anunciante</a>
+            <a th:href="@{/catalogo}" class="btn btn-contorno">Voltar ao Catálogo</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastrar Novo Imóvel')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div class="form-card">
+        <h1 style="font-size: 1.5rem; margin-bottom: 0.4rem;">Cadastrar Novo Imóvel</h1>
+        <p class="subtitulo" style="margin-bottom: 1.5rem;">
+            Informe os dados de localização do imóvel compartilhado.
+            O endereço exato permanecerá oculto no catálogo público.
+        </p>
+
+        <div th:if="${mensagemErro}" class="alerta alerta-erro" th:text="${mensagemErro}"></div>
+
+        <form th:action="@{/anunciante/imoveis/novo}" th:object="${imovelDTO}" method="post" novalidate>
+            <div class="form-grupo">
+                <label for="titulo">Título / Nome do Imóvel *</label>
+                <input type="text" id="titulo" th:field="*{titulo}" class="form-controle"
+                       placeholder="Ex.: República Universitária Sol Nascente" required autofocus>
+                <span class="erro-campo" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="endereco">Endereço Completo (Rua e Número - Privado) *</label>
+                <input type="text" id="endereco" th:field="*{endereco}" class="form-controle"
+                       placeholder="Ex.: Rua Roberto Simonsen, 450" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="bairro">Bairro (Exibido no Catálogo Público) *</label>
+                <input type="text" id="bairro" th:field="*{bairro}" class="form-controle"
+                       placeholder="Ex.: Jardim das Rosas" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('bairro')}" th:errors="*{bairro}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="cidade">Cidade / UF (Exibido no Catálogo Público) *</label>
+                <input type="text" id="cidade" th:field="*{cidade}" class="form-controle"
+                       placeholder="Ex.: Presidente Prudente - SP" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="cep">CEP</label>
+                <input type="text" id="cep" th:field="*{cep}" class="form-controle"
+                       placeholder="Ex.: 19060-080">
+                <span class="erro-campo" th:if="${#fields.hasErrors('cep')}" th:errors="*{cep}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="descricao">Descrição Geral do Imóvel</label>
+                <textarea id="descricao" th:field="*{descricao}" class="form-controle" rows="3"
+                          placeholder="Descreva brevemente as áreas compartilhadas (cozinha, lavanderia, distância da faculdade...)"></textarea>
+                <span class="erro-campo" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></span>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+                <button type="submit" class="btn btn-primario" style="flex: 1;">Salvar Imóvel</button>
+                <a th:href="@{/anunciante/painel}" class="btn btn-contorno">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+</body>
+</html>

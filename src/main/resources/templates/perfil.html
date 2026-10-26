@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Minha Conta e Perfil de Anunciante')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div class="cabecalho-pagina">
+        <div>
+            <h1>Minha Conta</h1>
+            <p class="subtitulo">Visualize seus dados cadastrais e habilite seu perfil de Anunciante.</p>
+        </div>
+        <div th:if="${usuario.anunciante}">
+            <a th:href="@{/anunciante/painel}" class="btn btn-primario">Ir para Painel do Anunciante</a>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 1.75rem;">
+        <h2 style="font-size: 1.2rem; margin-bottom: 0.75rem;">Dados da Conta</h2>
+        <p class="detalhe-item"><strong>Nome:</strong> <span th:text="${usuario.nome}"></span></p>
+        <p class="detalhe-item"><strong>E-mail:</strong> <span th:text="${usuario.email}"></span></p>
+        <p class="detalhe-item">
+            <strong>Perfil Atual:</strong>
+            <span class="badge" th:text="${usuario.perfil.descricao}"></span>
+        </p>
+    </div>
+
+    <div class="form-card" style="max-width: 100%;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 0.35rem;"
+            th:text="${usuario.anunciante} ? 'Dados de Anunciante (Habilitado)' : 'Habilitar Perfil de Anunciante'">
+            Habilitar Perfil de Anunciante
+        </h2>
+        <p class="subtitulo" style="margin-bottom: 1.25rem;">
+            Para cadastrar imóveis e quartos na plataforma, informe abaixo seus dados adicionais obrigatórios.
+        </p>
+
+        <form th:action="@{/perfil/tornar-anunciante}" th:object="${anuncianteDTO}" method="post" novalidate>
+            <div class="form-grupo">
+                <label for="cpfCnpj">CPF ou CNPJ *</label>
+                <input type="text" id="cpfCnpj" th:field="*{cpfCnpj}" class="form-controle"
+                       placeholder="Ex.: 123.456.789-00" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('cpfCnpj')}" th:errors="*{cpfCnpj}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="telefone">Telefone de Contato Principal *</label>
+                <input type="text" id="telefone" th:field="*{telefone}" class="form-controle"
+                       placeholder="Ex.: (18) 99999-0000" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="comprovanteResidencia">Comprovante de Residência (Identificação / Nº da Conta) *</label>
+                <input type="text" id="comprovanteResidencia" th:field="*{comprovanteResidencia}" class="form-controle"
+                       placeholder="Ex.: Conta de Energia CPFL - Instalação 981234" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('comprovanteResidencia')}" th:errors="*{comprovanteResidencia}"></span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="chavePix">Chave PIX para Recebimento *</label>
+                <input type="text" id="chavePix" th:field="*{chavePix}" class="form-controle"
+                       placeholder="E-mail, CPF/CNPJ, Telefone ou Chave Aleatória" required>
+                <span class="erro-campo" th:if="${#fields.hasErrors('chavePix')}" th:errors="*{chavePix}"></span>
+            </div>
+
+            <button type="submit" class="btn btn-secundario">
+                <span th:text="${usuario.anunciante} ? 'Atualizar Dados de Anunciante' : 'Habilitar Perfil de Anunciante'"></span>
+            </button>
+        </form>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+</body>
+</html>

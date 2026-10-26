@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Aviso do Sistema')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div class="form-card" style="text-align: center;">
+        <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;" th:text="${tituloErro ?: 'Aviso do Sistema'}">Erro</h1>
+        <div class="alerta alerta-erro" th:text="${mensagemErro ?: 'Ocorreu um erro ao processar sua solicitação.'}"></div>
+        <a th:href="@{/catalogo}" class="btn btn-primario">Voltar ao Catálogo Público</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+</body>
+</html>

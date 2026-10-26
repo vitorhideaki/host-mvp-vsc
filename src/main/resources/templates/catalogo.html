@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Catálogo Público de Quartos')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div th:if="${param.loginSucesso}" class="alerta alerta-sucesso">
+        Autenticação realizada com sucesso! Bem-vindo(a) à plataforma Host.
+    </div>
+    <div th:if="${param.logout}" class="alerta alerta-info">
+        Você encerrou sua sessão com segurança.
+    </div>
+    <div th:if="${mensagemSucesso}" class="alerta alerta-sucesso" th:text="${mensagemSucesso}"></div>
+
+    <div class="cabecalho-pagina">
+        <div>
+            <h1>Catálogo Público de Quartos Disponíveis</h1>
+            <p class="subtitulo">
+                Consulte vagas e quartos compartilhados disponíveis sem necessidade de cadastro.
+                Por privacidade, apenas o bairro e a cidade são exibidos publicamente.
+            </p>
+        </div>
+        <div>
+            <a sec:authorize="hasAnyRole('ANUNCIANTE', 'ADMINISTRADOR')"
+               th:href="@{/anunciante/quartos/novo}" class="btn btn-primario">+ Anunciar Novo Quarto</a>
+            <a sec:authorize="hasRole('USUARIO_CADASTRADO')"
+               th:href="@{/perfil}" class="btn btn-secundario">Habilitar Perfil de Anunciante</a>
+            <a sec:authorize="isAnonymous()"
+               th:href="@{/cadastro}" class="btn btn-primario">Cadastre-se para Anunciar ou Alugar</a>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(quartos)}" class="card" style="text-align: center; padding: 3rem;">
+        <h3>Nenhum quarto disponível no momento</h3>
+        <p class="subtitulo">Assim que novos quartos forem cadastrados por anunciantes, eles aparecerão aqui.</p>
+    </div>
+
+    <div class="grid-quartos" th:if="${!#lists.isEmpty(quartos)}">
+        <article class="card" th:each="quarto : ${quartos}">
+            <div>
+                <div class="card-topo">
+                    <span class="badge" th:text="${quarto.tipo.descricao}">Individual</span>
+                    <span class="badge badge-disponivel" th:text="${quarto.status.descricao}">Disponível</span>
+                </div>
+
+                <h2 style="font-size: 1.2rem; margin-bottom: 0.25rem;" th:text="${quarto.identificacao}">Quarto 01</h2>
+                <p style="color: #475569; font-weight: 600; font-size: 0.92rem; margin-bottom: 0.5rem;"
+                   th:text="${quarto.imovel.titulo}">República</p>
+
+                <div class="preco-destaque">
+                    R$ <span th:text="${#numbers.formatDecimal(quarto.valorMensal, 1, 'POINT', 2, 'COMMA')}">650,00</span>
+                    <small>/ mês</small>
+                </div>
+
+                <p class="detalhe-item">
+                    <strong>Localização (Bairro/Cidade):</strong>
+                    <span th:text="${quarto.imovel.localizacaoPublica}">Jardim das Rosas - Presidente Prudente</span>
+                </p>
+                <p class="detalhe-item">
+                    <strong>Capacidade:</strong>
+                    <span th:text="${quarto.capacidade} + (${quarto.capacidade == 1} ? ' pessoa' : ' pessoas')">1 pessoa</span>
+                </p>
+                <p class="detalhe-item">
+                    <strong>Comodidades:</strong>
+                    <span th:text="${quarto.comodidades}">Wi-Fi, mobiliado</span>
+                </p>
+                <p class="detalhe-item" th:if="${quarto.regras != null and !#strings.isEmpty(quarto.regras)}">
+                    <strong>Regras de Convivência:</strong>
+                    <span th:text="${quarto.regras}">Silêncio após 22h</span>
+                </p>
+            </div>
+        </article>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+</body>
+</html>
